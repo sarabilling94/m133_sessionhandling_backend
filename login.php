@@ -2,6 +2,7 @@
 session_start();
 
 require 'connect.php';
+require("functions.php");
 require 'accesscontrol.php';
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -28,20 +29,26 @@ if(isset($postdata) && !empty($postdata)){
       $auth = password_verify($formPassword, $data['password']);
 
       if ($auth) {
-        echo 'Correct password!';
+        //echo 'Correct password!';
 
             // Sessionvariablen erstellen und registrieren
           $_SESSION["id_user"] = $data["id_user"];
           $_SESSION["name"] = $data["name"];
 
-      header ("Location: intern.php");
+          $Message = "success";
+      
       } else {
           header ("Location: formular.php?fehler=1");
+          $Message = "error";
       }
+      
     }
   }
   else
   {
     header ("Location: formular.php?fehler=1");
   }
+  $response[] = array("Message" => $Message);
+  echo json_encode($response);
+  //echo json_encode($Message);
 }

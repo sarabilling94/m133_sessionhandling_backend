@@ -4,10 +4,6 @@ session_start();
 require 'connect.php';
 require("functions.php");
 require 'accesscontrol.php';
-header("Access-Control-Allow-Origin: http://localhost:3000");
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
 
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){
@@ -23,6 +19,8 @@ if(isset($postdata) && !empty($postdata)){
   if($result){
     if (mysqli_num_rows ($result) > 0)
     {
+      $auth = false;
+
       // Benutzerdaten in ein Array auslesen.
       $data = mysqli_fetch_array ($result,MYSQLI_ASSOC);
 
@@ -32,23 +30,23 @@ if(isset($postdata) && !empty($postdata)){
         //echo 'Correct password!';
 
             // Sessionvariablen erstellen und registrieren
-          $_SESSION["id_user"] = $data["id_user"];
           $_SESSION["name"] = $data["name"];
 
-          $Message = "success";
+          echo $_SESSION["name"];
+
+          http_response_code(200);
       
       } else {
-          header ("Location: formular.php?fehler=1");
-          $Message = "error";
+          http_response_code(403);
       }
       
     }
+    else {
+          http_response_code(403);
+      }
   }
   else
   {
-    header ("Location: formular.php?fehler=1");
+    http_response_code(403);
   }
-  $response[] = array("Message" => $Message);
-  echo json_encode($response);
-  //echo json_encode($Message);
 }

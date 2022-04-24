@@ -1,12 +1,18 @@
 <?php
+session_start();
 require 'accesscontrol.php';
 
+echo session_id();
+echo $_SESSION["name"];
  
 if(!isset($_SESSION['name'])) {
-    die("Bitte erst einloggen"); 
+   http_response_code(401);
+   session_unset();
+   session_destroy();
  }
  else{
-    //echo 'Eingeloggt';
+    http_response_code(200);
+    echo 'Eingeloggt als: ', $_SESSION["name"];
  }
 
 ?> 

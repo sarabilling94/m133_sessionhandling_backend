@@ -31,8 +31,10 @@ if(isset($postdata) && !empty($postdata)){
 
             // Sessionvariablen erstellen und registrieren
           $_SESSION["name"] = $data["name"];
+          $_SESSION["id_user"] = $data["id_user"];
 
-          echo $_SESSION["name"];
+          echo "name: ", $_SESSION["name"];
+          echo "id_user: ", $_SESSION["id_user"];
 
           http_response_code(200);
       

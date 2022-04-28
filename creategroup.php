@@ -1,33 +1,53 @@
 <?php
 session_start();
 require 'connect.php';
-header("Access-Control-Allow-Origin: http://localhost:3000");
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
- 
+require 'accesscontrol.php';
+
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){
     $request = json_decode($postdata);
      
      
     $name = $request->name;
+    echo "name ", $name;
 
-    $sqlCreateGroup = "INSERT INTO tbl_group (name) VALUES ('$name')";
+    $sqlCreateGroup = "INSERT INTO tbl_group (groupname) VALUES ('$name')";
+    $createGroupResult = mysqli_query($db,$sqlCreateGroup);
 
-    $sqlGetGroupId = "SELECT id_group FROM tbl_group WHERE groupname=$name";
-    $idgroup = $db->query($sqlGetGroupId);
-    $iduser = $_SESSION["userid"];
+    if($createGroupResult){ //group created
+        $sqlGetGroupId = "SELECT id_group FROM tbl_group WHERE groupname = '$name'";
 
-    $sqlCreateGroupUser = 
-    "INSERT INTO tbl_groupuser (fk_group, fk_user, owner, coowner) VALUES ('$idgroup', '$iduser', true, false)";
-    //userid needs to be save as sessionvariable in login!
+        $groupResult =  mysqli_query ($db,$sqlGetGroupId);
 
-    if(mysqli_query($db,$sqlGroup)){
-        http_response_code(201);
+        if($groupResult){
+            $groupData = mysqli_fetch_array ($groupResult,MYSQLI_ASSOC); //gets id_group
+
+            $idgroup = $groupData["id_group"];
+            $iduser = $_SESSION["id_user"];
+
+            echo "id_group ", $idgroup;
+            echo "id_user ", $iduser;
+
+            $sqlCreateGroupUser = 
+            "INSERT INTO tbl_groupuser (fk_group, fk_user, owner, coowner) VALUES ('$idgroup', '$iduser', 1, 0)";
+        
+            if(mysqli_query($db,$sqlCreateGroupUser)){
+                http_response_code(201);
+            }
+            else{
+                echo "groupuser wasnt created";
+                http_response_code(422); 
+            }
+        }
+        else{
+            echo "groupid wasn't found";
+            http_response_code(404); 
+        }
     }
     else{
-         http_response_code(422); 
-    }
-         
+        echo "group wasn't created";
+        http_response_code(422); 
+    }       
 }
+    
 ?>

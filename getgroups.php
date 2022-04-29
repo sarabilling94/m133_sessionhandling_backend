@@ -7,14 +7,14 @@ $iduser = $_SESSION["id_user"];
 
 $sqlGetGroupIds = "SELECT * FROM tbl_groupuser WHERE fk_user = $iduser";
 
-$groupsOfUserResult =  mysqli_query ($db,$sqlGetGroupIds);
+$groupIdsResult =  mysqli_query ($db,$sqlGetGroupIds);
 
-if($groupsOfUserResult){
+if($groupIdsResult){
     $groupIdList = array();
-    while($array = mysqli_fetch_array($groupsOfUserResult)){
+    while($array = mysqli_fetch_array($groupIdsResult)){
         //echo "fk_group = ", $array['fk_group'], "\n";
         array_push($groupIdList,$array['fk_group']);
-        echo count($groupIdList);
+        //echo count($groupIdList);
     }
 
     $firstGroup = array_values($groupIdList)[0];
@@ -25,6 +25,18 @@ if($groupsOfUserResult){
         $sqlGetGroupsById .= " OR id_group = $nextGroup";
     }
 
-    echo $sqlGetGroupsById;
+    $groupsResult = mysqli_query ($db,$sqlGetGroupsById);
+    if($groupsResult){
+
+        $groupList = array();
+
+        while($array = mysqli_fetch_array($groupsResult)){
+            //echo "fk_group = ", $array['fk_group'], "\n";
+            array_push($groupList,$array['groupname']);
+            //echo "groupname: ", $array['groupname'], "\n";
+        }
+
+        echo json_encode($groupList);
+    }
 
 }

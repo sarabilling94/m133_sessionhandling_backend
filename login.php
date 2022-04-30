@@ -2,7 +2,6 @@
 session_start();
 
 require 'connect.php';
-require("functions.php");
 require 'accesscontrol.php';
 
 $postdata = file_get_contents("php://input");

@@ -1,10 +1,6 @@
 <?php
-//echo $_SESSION["name"];
 
 function checkOwnerRights($groupName, $db){
-    // session_start();
-    // require 'connect.php';
-    // require 'accesscontrol.php';
 
     $sqlGetGroupId = "SELECT id_group FROM tbl_group WHERE groupname = '$groupName'";
     $groupIdResult =  mysqli_query ($db,$sqlGetGroupId);
@@ -26,41 +22,30 @@ function checkOwnerRights($groupName, $db){
     }
     return http_response_code(401);
 }
- 
-// $postdata = file_get_contents("php://input");
-// if(isset($postdata) && !empty($postdata)){
-//     $request = json_decode($postdata);
-     
-//     $groupName = $request->groupName;
-//     echo "groupName ", $groupName;
 
-//     $sqlGetGroupId = "SELECT id_group FROM tbl_group WHERE groupname = '$groupName'";
-//     $groupIdResult =  mysqli_query ($db,$sqlGetGroupId);
+//checks if user is at least coowner
+function checkCoOwnerRights($groupName, $db){
 
-//     if($groupIdResult){
-//         $groupIdData = mysqli_fetch_array ($groupIdResult,MYSQLI_ASSOC);
-//         $groupId = $groupIdData["id_group"];
-//         $sqlGetOwner = "SELECT owner FROM tbl_groupuser WHERE fk_group = $groupId";
+    $sqlGetGroupId = "SELECT id_group FROM tbl_group WHERE groupname = '$groupName'";
+    $groupIdResult =  mysqli_query ($db,$sqlGetGroupId);
 
-//         $getOwnerResult = mysqli_query ($db,$sqlGetOwner);
-//         if($getOwnerResult){
-//             $ownerData = mysqli_fetch_array ($getOwnerResult,MYSQLI_ASSOC);
-//             $owner = $ownerData["owner"];
+    if($groupIdResult){
+        $groupIdData = mysqli_fetch_array ($groupIdResult,MYSQLI_ASSOC);
+        $groupId = $groupIdData["id_group"];
+        $sqlGetOwner = "SELECT owner, coowner FROM tbl_groupuser WHERE fk_group = $groupId";
 
-//             if($owner){
-//                 http_response_code(200);
-//             }
-//             else{
-//                 http_response_code(401);
-//             }
-//         }
-//         else{
-//             http_response_code(401);
-//         }
-//     }
-//     else{
-//         http_response_code(401);
-//     }
-// }
+        $getOwnerResult = mysqli_query ($db,$sqlGetOwner);
+        if($getOwnerResult){
+            $ownerData = mysqli_fetch_array ($getOwnerResult,MYSQLI_ASSOC);
+            $owner = $ownerData["owner"];
+            $coowner = $ownerData["coowner"];
+
+            if($owner || $coowner){
+                return http_response_code(200);
+            }
+        }
+    }
+    return http_response_code(401);
+}
 
 ?> 

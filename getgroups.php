@@ -36,7 +36,15 @@ if($groupIdsResult){
             //echo "groupname: ", $array['groupname'], "\n";
         }
 
-        echo json_encode($groupList);
+        if(count($groupList) > 0){
+            echo json_encode($groupList);
+        }
+        else{
+            http_response_code(404);
+        }
+    }
+    else{
+        http_response_code(404);
     }
 
 }

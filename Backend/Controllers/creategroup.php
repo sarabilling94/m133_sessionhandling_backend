@@ -1,7 +1,7 @@
 <?php
 session_start();
-require 'connect.php';
-require 'accesscontrol.php';
+require '../connect.php';
+require '../utils/accesscontrol.php';
 
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){

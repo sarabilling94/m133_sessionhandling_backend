@@ -1,5 +1,5 @@
 <?php
-require 'accesscontrol.php';
+require '../utils/accesscontrol.php';
 
 session_start();
 session_unset();

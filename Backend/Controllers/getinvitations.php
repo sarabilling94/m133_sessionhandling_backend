@@ -1,8 +1,8 @@
 <?php
 session_start();
-require 'connect.php';
-require 'accesscontrol.php';
-require 'groupfunctions.php';
+require '../connect.php';
+require '../utils/accesscontrol.php';
+require '../utils/groupfunctions.php';
 
 class Invitation
 {

@@ -8,7 +8,7 @@ function Invitations(): JSX.Element {
     const [invitations, setInvitations] = useState([]);
 
     const getInvitations = () => {
-        axios.get('http://localhost/haushaltsapp_backend/getinvitations.php', { withCredentials: true })
+        axios.get('http://localhost/haushaltsapp/Backend/Controllers/getinvitations.php', { withCredentials: true })
             .then(res => {
                 setInvitations(res.data);
                 //console.log(invitations);
@@ -24,7 +24,7 @@ function Invitations(): JSX.Element {
             groupName: e.target.id,
             sender: e.target.name
         };
-        axios.post('http://localhost/haushaltsapp_backend/insertgroupuser.php', obj, { withCredentials: true })
+        axios.post('http://localhost/haushaltsapp/Backend/Controllers/insertgroupuser.php', obj, { withCredentials: true })
             .then(res => {
                 if(res.statusText === "Created"){
                     console.log("Invitation accepted.");

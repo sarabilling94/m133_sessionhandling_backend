@@ -1,0 +1,15 @@
+div {
+    margin-bottom: 20px;
+  }
+  
+label {
+    display: block;
+    width: 60px;
+}
+
+.form{
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target":"ES2019",
+        "module": "ESnext",
+        "moduleResolution": "node",
+        "lib": ["ES2019", "DOM", "DOM.Iterable"],
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "noEmit": true,
+        "jsx":"react-jsx"
+    },
+    "include": [
+        "src"
+    ]
+}

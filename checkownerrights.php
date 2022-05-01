@@ -5,7 +5,7 @@ function checkOwnerRights($groupName, $db){
     $sqlGetGroupId = "SELECT id_group FROM tbl_group WHERE groupname = '$groupName'";
     $groupIdResult =  mysqli_query ($db,$sqlGetGroupId);
 
-    if($groupIdResult){
+    if(mysqli_num_rows($groupIdResult) > 0){
         $groupIdData = mysqli_fetch_array ($groupIdResult,MYSQLI_ASSOC);
         $groupId = $groupIdData["id_group"];
         $iduser = $_SESSION["id_user"];
@@ -13,7 +13,7 @@ function checkOwnerRights($groupName, $db){
         $sqlGetOwner = "SELECT owner FROM tbl_groupuser WHERE fk_group = $groupId AND fk_user = $iduser";
 
         $getOwnerResult = mysqli_query ($db,$sqlGetOwner);
-        if($getOwnerResult){
+        if(mysqli_num_rows($getOwnerResult) > 0){
             $ownerData = mysqli_fetch_array ($getOwnerResult,MYSQLI_ASSOC);
             $owner = $ownerData["owner"];
 
@@ -31,14 +31,14 @@ function checkCoOwnerRights($groupName, $db){
     $sqlGetGroupId = "SELECT id_group FROM tbl_group WHERE groupname = '$groupName'";
     $groupIdResult =  mysqli_query ($db,$sqlGetGroupId);
 
-    if($groupIdResult){
+    if(mysqli_num_rows($groupIdResult) > 0){
         $groupIdData = mysqli_fetch_array ($groupIdResult,MYSQLI_ASSOC);
         $groupId = $groupIdData["id_group"];
         $iduser = $_SESSION["id_user"];
         $sqlGetOwner = "SELECT owner, coowner FROM tbl_groupuser WHERE fk_group = $groupId AND fk_user = $iduser";
 
         $getOwnerResult = mysqli_query ($db,$sqlGetOwner);
-        if($getOwnerResult){
+        if(mysqli_num_rows($getOwnerResult) > 0){
             $ownerData = mysqli_fetch_array ($getOwnerResult,MYSQLI_ASSOC);
             $owner = $ownerData["owner"];
             $coowner = $ownerData["coowner"];

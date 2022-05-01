@@ -19,7 +19,7 @@ if(isset($postdata) && !empty($postdata)){
 
         $groupResult =  mysqli_query ($db,$sqlGetGroupId);
 
-        if($groupResult){
+        if(mysqli_num_rows($groupResult) > 0){
             $groupData = mysqli_fetch_array ($groupResult,MYSQLI_ASSOC); //gets id_group
 
             $idgroup = $groupData["id_group"];

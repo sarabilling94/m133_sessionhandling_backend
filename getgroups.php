@@ -9,7 +9,7 @@ $sqlGetGroupIds = "SELECT * FROM tbl_groupuser WHERE fk_user = $iduser";
 
 $groupIdsResult =  mysqli_query ($db,$sqlGetGroupIds);
 
-if($groupIdsResult){
+if(mysqli_num_rows($groupIdsResult) > 0){
     $groupIdList = array();
     while($array = mysqli_fetch_array($groupIdsResult)){
         //echo "fk_group = ", $array['fk_group'], "\n";
@@ -26,7 +26,7 @@ if($groupIdsResult){
     }
 
     $groupsResult = mysqli_query ($db,$sqlGetGroupsById);
-    if($groupsResult){
+    if(mysqli_num_rows($groupsResult) > 0){
 
         $groupList = array();
 

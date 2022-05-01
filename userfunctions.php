@@ -40,4 +40,14 @@ function receivedInvitation($userName, $groupName, $db){
     return false;
 }
 
+function userExists($userName, $db){
+    $sql = "SELECT * FROM tbl_user WHERE name = '$userName'";
+    
+    $result = mysqli_query ($db, $sql);
+    if(mysqli_num_rows ($result) > 0){
+        return true;
+    }
+    return false;
+}
+
 ?>

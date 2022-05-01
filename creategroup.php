@@ -8,7 +8,7 @@ if(isset($postdata) && !empty($postdata)){
     $request = json_decode($postdata);
      
      
-    $name = $request->name;
+    $name = mysqli_real_escape_string($db, $request->name);
     echo "name ", $name;
 
     $sqlCreateGroup = "INSERT INTO tbl_group (groupname) VALUES ('$name')";

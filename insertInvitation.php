@@ -10,8 +10,8 @@ if(isset($postdata) && !empty($postdata)){
     $request = json_decode($postdata);
      
      
-    $receiverName = $request->receiverName;
-    $groupName = $request->groupName;
+    $receiverName = mysqli_real_escape_string($db,$request->receiverName);
+    $groupName = mysqli_real_escape_string($db,$request->groupName);
     $senderId = $_SESSION["id_user"];
 
     $allowed = checkCoOwnerRights($groupName, $db);

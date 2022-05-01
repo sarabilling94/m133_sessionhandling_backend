@@ -9,8 +9,8 @@ if(isset($postdata) && !empty($postdata)){
     $request = json_decode($postdata);
      
      
-    $name = $request->name;
-    $password = $request->password;
+    $name = mysqli_real_escape_string($db,$request->name);
+    $password = mysqli_real_escape_string($db,$request->password);
     $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
 
     $sql = "INSERT INTO tbl_user (name,password) VALUES ('$name','$hashedpassword')";

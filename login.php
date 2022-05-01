@@ -9,8 +9,8 @@ if(isset($postdata) && !empty($postdata)){
 
   $request = json_decode($postdata);
           
-  $formName = $request->name;
-  $formPassword = $request->password;
+  $formName = mysqli_real_escape_string($db,$request->name);
+  $formPassword = mysqli_real_escape_string($db,$request->password);
 
   $sql = "SELECT * FROM tbl_user WHERE name = '$formName' LIMIT 1";
   $result = mysqli_query ($db,$sql);

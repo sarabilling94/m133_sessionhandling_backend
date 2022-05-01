@@ -10,7 +10,7 @@ if(isset($postdata) && !empty($postdata)){
     $request = json_decode($postdata);
      
      
-    $groupName = $request->groupName;
+    $groupName = mysqli_real_escape_string($db,$request->groupName);
     echo "groupName ", $groupName;
 
     $allowed= checkOwnerRights($groupName, $db);

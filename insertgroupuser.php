@@ -9,9 +9,9 @@ $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){
     $request = json_decode($postdata);
           
-    $groupName = $request->groupName;
+    $groupName = mysqli_real_escape_string($db,$request->groupName);
     $groupId = getGroupId($groupName, $db);
-    $senderName = $request->sender;
+    $senderName = mysqli_real_escape_string($db,$request->sender);
     $senderId = getUserId($senderName, $db);
     $iduser = $_SESSION["id_user"];
 

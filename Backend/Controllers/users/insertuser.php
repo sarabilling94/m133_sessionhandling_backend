@@ -16,18 +16,22 @@ if(isset($postdata) && !empty($postdata)){
 
     $alreadyExists = userExists($name, $db);
 
-    if(!$alreadyExists){
-        $sql = "INSERT INTO tbl_user (name,password) VALUES ('$name','$hashedpassword')";
-        if(mysqli_query($db,$sql)){
-            http_response_code(201);
+    if((strlen($name) > 0) && (strlen($name) < 50) && (strlen($password) > 5)){
+        if(!$alreadyExists){
+            $sql = "INSERT INTO tbl_user (name,password) VALUES ('$name','$hashedpassword')";
+            if(mysqli_query($db,$sql)){
+                http_response_code(201);
+            }
+            else{
+                http_response_code(500); 
+            }
         }
         else{
-             http_response_code(422); 
-        }
+            http_response_code(409);
+            echo "User already exists.";
+        } 
     }
-     else{
-         http_response_code(409);
-         echo "User already exists.";
-     }    
+    else{
+        http_response_code(422);
+    }   
 }
-?> 

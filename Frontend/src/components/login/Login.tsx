@@ -3,8 +3,10 @@ import axios from 'axios';
 import { Formik } from 'formik';
 import { Form, Input, Title2, Button } from "../../theme.js";
 import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
 
 function Login(): JSX.Element {
+  const [message, setMessage] = useState("");
 
     const onSubmit = (name, password) => {
         const obj ={
@@ -22,6 +24,9 @@ function Login(): JSX.Element {
           })
           .catch(error => {
             console.log(error.response)
+            if(error.response.statusText === "Forbidden"){
+              setMessage("Benutzername oder Passwort ist falsch.");
+            }
         });
     }
 
@@ -76,6 +81,7 @@ function Login(): JSX.Element {
         </Form>
       )}
     </Formik>
+    <p>{message}</p>
     </div>
 </>
   );

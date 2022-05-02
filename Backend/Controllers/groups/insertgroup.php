@@ -2,6 +2,7 @@
 session_start();
 require '../../connect.php';
 require '../../utils/accesscontrol.php';
+require 'groupfunctions.php';
 
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){
@@ -9,7 +10,17 @@ if(isset($postdata) && !empty($postdata)){
      
      
     $name = mysqli_real_escape_string($db, $request->name);
-    echo "name ", $name;
+
+    $alreadyExists = groupAlreadyExists($name, $db);
+    if($alreadyExists){
+        http_response_code(409);
+        die();
+    }
+
+    if((strlen($name) < 1) || (strlen($name) > 50)){
+        http_response_code(422);
+        die();
+    }
 
     $sqlCreateGroup = "INSERT INTO tbl_group (groupname) VALUES ('$name')";
     $createGroupResult = mysqli_query($db,$sqlCreateGroup);

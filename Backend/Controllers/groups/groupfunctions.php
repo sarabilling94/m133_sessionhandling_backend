@@ -48,7 +48,7 @@ function getAllUsersOfGroup($idgroup, $db){
     INNER JOIN tbl_user on tbl_groupuser.fk_user = tbl_user.id_user
     WHERE fk_group = $idgroup";
 
-    $groupUsersResult =  mysqli_query ($db,$sqlGetUsers);
+    $groupUsersResult =  mysqli_query($db,$sqlGetUsers);
 
     if(mysqli_num_rows($groupUsersResult) > 0){
         $group = new Group();
@@ -69,4 +69,13 @@ function getAllUsersOfGroup($idgroup, $db){
         return $group;
     }
     return null;
+}
+
+function groupAlreadyExists($groupname, $db){
+    $sql = "SELECT * FROM tbl_group WHERE groupname = '$groupname'";
+    $result = mysqli_query ($db,$sql);
+    if(mysqli_num_rows($result) > 0){
+        return true;
+    }
+    return false;
 }

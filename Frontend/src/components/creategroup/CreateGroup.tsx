@@ -8,14 +8,15 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 function CreateGroup(): JSX.Element {
   const [groups, setGroups] = useState([]);
   const [selectedGroupValue, setSelectedGroupValue] = useState("");
-  const [message, setMessage] = useState("");
+  const [message1, setMessage1] = useState("");
+  const [message2, setMessage2] = useState("");
 
   const onSubmit = name => {
     const obj = {
       name: name
     };
 
-    axios.post('http://localhost/haushaltsapp/Backend/Controllers/groups/creategroup.php', obj, { withCredentials: true })
+    axios.post('http://localhost/haushaltsapp/Backend/Controllers/groups/insertgroup.php', obj, { withCredentials: true })
       .then(res => {
         console.log(res);
         if (res.statusText === "Created") {
@@ -25,7 +26,13 @@ function CreateGroup(): JSX.Element {
         }
       })
       .catch(error => {
-        console.log("Group hasn't been created.")
+        console.log(error.response);
+        if (error.response.statusText === "Conflict"){
+          setMessage1("Gruppe existiert schon.");
+        }
+        else if(error.response.statusText === "Unprocessable Entity"){
+          setMessage1("Gruppenname muss zwischen 0 und 50 Zeichen haben.");
+        }
       });
   }
 
@@ -55,7 +62,6 @@ function CreateGroup(): JSX.Element {
   };
 
   const deleteGroup = () => {
-    //checkOwnerRights(selectedGroupValue);
     const obj = {
       groupName: selectedGroupValue
     };
@@ -69,7 +75,7 @@ function CreateGroup(): JSX.Element {
         }
         else {
           console.log("Owner rights needed to delete group.");
-          setMessage("Nur Benutzer mit Besitzerrechten dürfen Gruppen löschen!");
+          setMessage2("Nur Benutzer mit Besitzerrechten dürfen Gruppen löschen!");
         }
       })
       .catch(error => {
@@ -79,7 +85,7 @@ function CreateGroup(): JSX.Element {
 
   const handleSelectChange = (e) => {
     setSelectedGroupValue(e.target.value);
-    setMessage("");
+    setMessage2("");
   };
 
   useEffect(() => {
@@ -124,6 +130,7 @@ function CreateGroup(): JSX.Element {
             </Form>
           )}
         </Formik>
+        <p>{message1}</p>
         {groups.length > 0 ?
           <>
             <Title2>Gruppen</Title2>
@@ -154,7 +161,7 @@ function CreateGroup(): JSX.Element {
               <Title2 style={{ margin: "12px" }}>Ausgewählte Gruppe: {selectedGroupValue}</Title2>
               <Button onClick={deleteGroup}>Gruppe löschen</Button>
 
-              <p>{message}</p>
+              <p>{message2}</p>
 
               <Title2 style={{ margin: "12px" }}>Benutzer einladen</Title2>
               <Formik

@@ -1,9 +1,10 @@
 <?php
 session_start();
-require '../connect.php';
-require '../utils/accesscontrol.php';
-require '../utils/userfunctions.php';
-require '../utils/checkownerrights.php';
+require '../../connect.php';
+require '../../utils/accesscontrol.php';
+require '../users/userfunctions.php';
+require '../users/checkownerrights.php';
+require 'invitationfunctions.php';
 
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){

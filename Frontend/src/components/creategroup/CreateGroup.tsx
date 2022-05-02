@@ -15,7 +15,7 @@ function CreateGroup(): JSX.Element {
       name: name
     };
 
-    axios.post('http://localhost/haushaltsapp/Backend/Controllers/creategroup.php', obj, { withCredentials: true })
+    axios.post('http://localhost/haushaltsapp/Backend/Controllers/groups/creategroup.php', obj, { withCredentials: true })
       .then(res => {
         console.log(res);
         if (res.statusText === "Created") {
@@ -35,7 +35,7 @@ function CreateGroup(): JSX.Element {
       groupName: selectedGroupValue
     };
 
-    axios.post('http://localhost/haushaltsapp/Backend/Controllers/insertinvitation.php', obj, { withCredentials: true })
+    axios.post('http://localhost/haushaltsapp/Backend/Controllers/invitations/insertinvitation.php', obj, { withCredentials: true })
       .then(res => {
         console.log(res.data);
       })
@@ -44,7 +44,7 @@ function CreateGroup(): JSX.Element {
   }
 
   const getGroups = () => {
-    axios.get('http://localhost/haushaltsapp/Backend/Controllers/getgroups.php', { withCredentials: true })
+    axios.get('http://localhost/haushaltsapp/Backend/Controllers/groups/getgroups.php', { withCredentials: true })
       .then(res => {
         setGroups(res.data);
         console.log(groups);
@@ -60,7 +60,7 @@ function CreateGroup(): JSX.Element {
       groupName: selectedGroupValue
     };
 
-    axios.post('http://localhost/haushaltsapp/Backend/Controllers/deletegroup.php', obj, { withCredentials: true })
+    axios.post('http://localhost/haushaltsapp/Backend/Controllers/groups/deletegroup.php', obj, { withCredentials: true })
       .then(res => {
         if (res.statusText === "Accepted") {
           console.log("Group deleted");

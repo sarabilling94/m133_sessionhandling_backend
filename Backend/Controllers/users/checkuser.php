@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../utils/accesscontrol.php';
+require '../../utils/accesscontrol.php';
 
 echo session_id();
 echo $_SESSION["name"];

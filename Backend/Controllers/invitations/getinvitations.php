@@ -1,14 +1,10 @@
 <?php
 session_start();
-require '../connect.php';
-require '../utils/accesscontrol.php';
-require '../utils/groupfunctions.php';
-
-class Invitation
-{
-    public $sender;
-    public $group;
-}
+require '../../connect.php';
+require '../../utils/accesscontrol.php';
+require '../groups/groupfunctions.php';
+require 'invitationfunctions.php';
+require '../dtos/invitation.php';
 
 $iduser = $_SESSION["id_user"];
 

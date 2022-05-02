@@ -1,5 +1,5 @@
 <?php
-require 'groupfunctions.php';
+require '../groups/groupfunctions.php';
 
 function getUserId($name, $db){
     $sql = "SELECT id_user FROM tbl_user WHERE name = '$name'";

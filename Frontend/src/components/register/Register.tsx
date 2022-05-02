@@ -10,7 +10,7 @@ function Register(): JSX.Element {
       password: password,
     };
 
-    axios.post('http://localhost/haushaltsapp/Backend/Controllers/insertuser.php', obj)
+    axios.post('http://localhost/haushaltsapp/Backend/Controllers/users/insertuser.php', obj)
       .then(res => console.log(res.data))
       .catch(error => {
         console.log(error.response)

@@ -10,7 +10,6 @@ $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){
     $request = json_decode($postdata);
      
-     
     $receiverName = mysqli_real_escape_string($db,$request->receiverName);
     $groupName = mysqli_real_escape_string($db,$request->groupName);
     $senderId = $_SESSION["id_user"];
@@ -19,7 +18,7 @@ if(isset($postdata) && !empty($postdata)){
     $userAlreadyInGroup = userIsInGroup($receiverName, $groupName, $db);
     $alreadyInvited = receivedInvitation($receiverName, $groupName, $db);
 
-    if(($allowed == http_response_code(200)) && !$userAlreadyInGroup && !$alreadyInvited){
+    if($allowed && !$userAlreadyInGroup && !$alreadyInvited){
         $receiverId = getUserId($receiverName, $db);
         $groupId = getGroupId($groupName, $db);
 

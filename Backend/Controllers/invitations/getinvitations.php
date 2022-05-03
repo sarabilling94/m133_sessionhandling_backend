@@ -13,11 +13,11 @@ FROM tbl_invitation
 INNER JOIN tbl_user ON tbl_invitation.fk_sender = tbl_user.id_user
 WHERE tbl_invitation.fk_receiver = $iduser";
 
-$InvitationsResult =  mysqli_query ($db,$sqlGetInvitations);
+$invitationsResult =  mysqli_query ($db,$sqlGetInvitations);
 
-if(mysqli_num_rows($InvitationsResult) > 0){
+if(mysqli_num_rows($invitationsResult) > 0){
     $invitationList = array();
-    while($data = mysqli_fetch_array($InvitationsResult)){   
+    while($data = mysqli_fetch_array($invitationsResult)){   
         $nextInvitation = new Invitation();
 
         $groupId = $data["fk_group"];

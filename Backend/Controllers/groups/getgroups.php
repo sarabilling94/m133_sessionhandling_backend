@@ -18,25 +18,27 @@ if($groupIdList){
     }
 
     $groupsResult = mysqli_query ($db,$sqlGetGroupsById);
-    if(mysqli_num_rows($groupsResult) > 0){
+    if(!$groupsResult){
+        http_response_code(500);
+        die();
+    }
 
-        $groupList = array();
+    if(mysqli_num_rows($groupsResult) < 1){
+        http_response_code(404);
+        die();
+    }
 
-        while($array = mysqli_fetch_array($groupsResult)){
-            //echo "fk_group = ", $array['fk_group'], "\n";
-            array_push($groupList,$array['groupname']);
-            //echo "groupname: ", $array['groupname'], "\n";
-        }
+    $groupList = array();
+    while($array = mysqli_fetch_array($groupsResult)){
+        //echo "fk_group = ", $array['fk_group'], "\n";
+        array_push($groupList,$array['groupname']);
+        //echo "groupname: ", $array['groupname'], "\n";
+    }
 
-        if(count($groupList) > 0){
-            echo json_encode($groupList);
-        }
-        else{
-            http_response_code(404);
-        }
+    if(count($groupList) > 0){
+        echo json_encode($groupList);
     }
     else{
         http_response_code(404);
     }
-
 }

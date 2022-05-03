@@ -40,6 +40,13 @@ export const Title2 = styled.h2`
   font-size: 1.8em;
 `;
 
+export const Title3 = styled.h3`
+  font-family: 'Raleway', sans-serif;
+  font-weight: 150;
+  color: #4d4d4d;
+  font-size: 1.3em;
+`;
+
 export const Text = styled.p`
   font-family: 'Raleway', sans-serif;
   color: ${props => props.color || '#4d4d4d'}

@@ -23,19 +23,8 @@ if(isset($postdata) && !empty($postdata)){
     $groupId = getGroupId($group, $db);
     $userId = getUserId($user, $db);
 
-    $sqlGetGroupUserId = "SELECT id_groupuser FROM tbl_groupuser WHERE 
-    fk_group = $groupId AND fk_user = $userId";
-    $getGroupUserIdResult = mysqli_query ($db,$sqlGetGroupUserId);
-    if(!$getGroupUserIdResult){
-        die();
-        http_response_code(404);
-    }
-
-    $groupUserData = mysqli_fetch_array ($getGroupUserIdResult,MYSQLI_ASSOC);
-    $groupUserId = $groupUserData["id_groupuser"];
-
-    $sqlInsert = "INSERT INTO tbl_plan (date, onetime_task, fk_user, fk_groupuser, fk_task) 
-    VALUES ('$date', '$task', $userId, $groupUserId, null)";
+    $sqlInsert = "INSERT INTO tbl_plan (date, onetime_task, fk_user, fk_group, fk_task) 
+    VALUES ('$date', '$task', $userId, $groupId, null)";
 
     $insertResult = mysqli_query ($db,$sqlInsert);
         if($insertResult){

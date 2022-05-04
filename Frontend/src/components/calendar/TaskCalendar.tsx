@@ -83,7 +83,7 @@ function TaskCalendar(): JSX.Element {
 
     axios.post('http://localhost/haushaltsapp/Backend/Controllers/tasks/getplans.php', obj, { withCredentials: true })
       .then(res => {
-        console.log(res.data);
+        //console.log("plans :", res.data);
         setPlans(res.data);
       })
       .catch(error => {

@@ -12,15 +12,8 @@ if(isset($postdata) && !empty($postdata)){
         
     $groupName = mysqli_real_escape_string($db,$request->groupName);
     $groupId = getGroupId($groupName, $db);
-    $groupUserId = getGroupUserId($groupId, $db);
 
-    if(!$groupUserId){
-        http_response_code(500);
-        die();
-    }
-
-
-    $sqlGetPlans = "SELECT fk_user, onetime_task, fk_task FROM tbl_plan WHERE fk_groupuser = $groupUserId";
+    $sqlGetPlans = "SELECT fk_user, onetime_task, fk_task FROM tbl_plan WHERE fk_group = $groupId";
 
     $getPlansResult =  mysqli_query ($db,$sqlGetPlans);
 

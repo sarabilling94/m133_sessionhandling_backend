@@ -42,6 +42,19 @@ function getGroupOfUser($iduser, $db){
     return null;
 }
 
+function getGroupUserId($idgroup, $db){
+    $sqlGetGroupUserId = "SELECT id_groupuser FROM tbl_groupuser WHERE fk_group = $idgroup";
+
+    $groupUserIdResult =  mysqli_query ($db,$sqlGetGroupUserId);
+
+    if(mysqli_num_rows($groupUserIdResult) > 0){
+        $groupUserIdData = mysqli_fetch_array ($groupUserIdResult,MYSQLI_ASSOC);
+        $groupUserId = $groupUserIdData["id_groupuser"];
+        return $groupUserId;
+    }
+    return null;
+}
+
 function getAllUsersOfGroup($idgroup, $db){
     $sqlGetUsers = "SELECT tbl_groupuser.fk_user, tbl_groupuser.owner, tbl_groupuser.coowner, tbl_user.name 
     FROM tbl_groupuser

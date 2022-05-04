@@ -16,6 +16,21 @@ function getUserId($name, $db){
     return null;
 }
 
+function getUserName($userId, $db){
+    $sql = "SELECT name FROM tbl_user WHERE id_user = $userId";
+
+    $result = mysqli_query ($db,$sql);
+    if(!$result){
+        return null;
+    }
+    if(mysqli_num_rows ($result) > 0){
+        $data = mysqli_fetch_array ($result,MYSQLI_ASSOC);
+        return $data["name"];
+    }
+
+    return null;
+}
+
 function userIsInGroup($userName, $groupName, $db){
     $userId = getUserId($userName, $db);
     $groupId = getGroupId($groupName, $db);

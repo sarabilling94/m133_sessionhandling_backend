@@ -13,6 +13,7 @@ function TaskCalendar(): JSX.Element {
   const [date, setDate] = useState(new Date());
   const [selectedGroupValue, setSelectedGroupValue] = useState("");
   const [selectedUserValue, setSelectedUserValue] = useState("");
+  const [plans, setPlans] = useState([]);
 
   const onSubmit = (name, checkbox) => {
     console.log("checkbox:", checkbox);
@@ -75,10 +76,28 @@ function TaskCalendar(): JSX.Element {
       })
   };
 
+  const getPlansOfGroup = (groupName) => {
+    const obj = {
+      groupName: groupName
+    };
+
+    axios.post('http://localhost/haushaltsapp/Backend/Controllers/tasks/getplans.php', obj, { withCredentials: true })
+      .then(res => {
+        console.log(res.data);
+        setPlans(res.data);
+      })
+      .catch(error => {
+        console.log(error.response);
+      })
+  };
+
+
+
   const handleSelectGroupChange = (e) => {
     const groupName = e.target.value;
     setSelectedGroupValue(groupName);
     getUsersOfGroup(groupName);
+    getPlansOfGroup(groupName);
   };
 
   const handleSelectUserChange = (e) => {
@@ -98,6 +117,23 @@ function TaskCalendar(): JSX.Element {
         <Title2>Kalender</Title2>
         <div className='calendar-container'>
           <Calendar onChange={setDate} value={date} />
+
+          {selectedGroupValue ?
+          <>
+          <Title3>Aufgaben</Title3>
+                    <ol>
+                      {plans ?
+                        plans.map((plan, index) => {
+                          return (
+                            <li key={index}>{plan.plan}</li>
+                          );
+                        })
+                        : null
+                      }
+                    </ol>
+                    </>
+                    : null
+                  }
         </div>
 
         <Title3>Aufgabe hinzufügen</Title3>
@@ -144,25 +180,25 @@ function TaskCalendar(): JSX.Element {
                     }
                   </Select>
                   {selectedGroupValue ?
-                  <Select
-                    style={{ width: "310px", height: "40px", margin: "10px" }}
-                    labelId="selectgroup-label"
-                    id="selectuser"
-                    value={selectedUserOfGroup}
-                    label="Benutzer"
-                    onChange={handleSelectUserChange}
-                  >
-                    { usersOfGroup ?
-                    usersOfGroup.map((user, index) => {
-                      return (
-                        <MenuItem key={index} value={user.username}>{user.username}</MenuItem>
-                      );
-                    })
-                  : null
+                    <Select
+                      style={{ width: "310px", height: "40px", margin: "10px" }}
+                      labelId="selectgroup-label"
+                      id="selectuser"
+                      value={selectedUserOfGroup}
+                      label="Benutzer"
+                      onChange={handleSelectUserChange}
+                    >
+                      {usersOfGroup ?
+                        usersOfGroup.map((user, index) => {
+                          return (
+                            <MenuItem key={index} value={user.username}>{user.username}</MenuItem>
+                          );
+                        })
+                        : null
+                      }
+                    </Select>
+                    : null
                   }
-                  </Select>
-                  : null
-                }
                   <Input
                     type="name"
                     name="name"
@@ -176,7 +212,7 @@ function TaskCalendar(): JSX.Element {
                     name="checkbox"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.name}
+                    value={values.checkbox}
                   />
                   <Button type="submit" disabled={isSubmitting}>
                     Submit

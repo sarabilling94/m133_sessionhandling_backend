@@ -9,8 +9,10 @@ import axios from 'axios';
 
 function TaskCalendar(): JSX.Element {
   const [groups, setGroups] = useState([]);
+  const [usersOfGroup, setUsersOfGroup] = useState([]);
   const [date, setDate] = useState(new Date());
   const [selectedGroupValue, setSelectedGroupValue] = useState("");
+  const [selectedUserValue, setSelectedUserValue] = useState("");
 
   const onSubmit = (name, checkbox) => {
     const obj = {
@@ -19,23 +21,23 @@ function TaskCalendar(): JSX.Element {
       date: date.toISOString().split('T')[0]
     };
 
-    if(checkbox){//onetimetask
+    if (checkbox) {//onetimetask
       axios.post('http://localhost/haushaltsapp/Backend/Controllers/tasks/insertonetimetask.php', obj, { withCredentials: true })
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(error => {
-        console.log(error.response);
-      });
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
     }
-    else{
+    else {
       axios.post('http://localhost/haushaltsapp/Backend/Controllers/tasks/inserttask.php', obj, { withCredentials: true })
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(error => {
-        console.log(error.response);
-      });
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
     }
   };
 
@@ -51,8 +53,31 @@ function TaskCalendar(): JSX.Element {
   };
 
 
-  const handleSelectChange = (e) => {
-    setSelectedGroupValue(e.target.value);
+  const getUsersOfGroup = (groupName) => {
+    const obj = {
+      groupName: groupName
+    };
+
+    axios.post('http://localhost/haushaltsapp/Backend/Controllers/groups/getusersofgroup.php', obj, { withCredentials: true })
+      .then(res => {
+        console.log(res.data);
+        const currentGroup = res.data;
+        setUsersOfGroup(currentGroup.list_groupusers);
+        //console.log("usersofgroup: ", currentGroup);
+      })
+      .catch(error => {
+        //console.log(error.response);
+      })
+  };
+
+  const handleSelectGroupChange = (e) => {
+    const groupName = e.target.value;
+    setSelectedGroupValue(groupName);
+    getUsersOfGroup(groupName);
+  };
+
+  const handleSelectUserChange = (e) => {
+    setSelectedUserValue(e.target.value);
   };
 
   useEffect(() => {
@@ -60,6 +85,7 @@ function TaskCalendar(): JSX.Element {
   }, []);
 
   let selectedGroup;
+  let selectedUserOfGroup;
 
   return (
     <>
@@ -76,62 +102,84 @@ function TaskCalendar(): JSX.Element {
         </p>
 
         {groups.length > 0 ?
-          <Formik
-            initialValues={{ name: '', checkbox: false }}
-            onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
-                onSubmit(values.name, values.checkbox);
-                setSubmitting(false);
-              }, 400);
-            }}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-            }) => (
-              <Form onSubmit={handleSubmit}>
-                <Select
-                style={{width: "310px", height: "40px", margin: "10px"}}
-                  labelId="selectgroup-label"
-                  id="selectgroup"
-                  value={selectedGroup}
-                  label="Gruppen"
-                  onChange={handleSelectChange}
-                >
-                  {
-                    groups.map((group, index) => {
+          <>
+            <Formik
+              initialValues={{ name: '', checkbox: false }}
+              onSubmit={(values, { setSubmitting }) => {
+                setTimeout(() => {
+                  onSubmit(values.name, values.checkbox);
+                  setSubmitting(false);
+                }, 400);
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+              }) => (
+                <Form onSubmit={handleSubmit}>
+                  <Select
+                    style={{ width: "310px", height: "40px", margin: "10px" }}
+                    labelId="selectgroup-label"
+                    id="selectgroup"
+                    value={selectedGroup}
+                    label="Gruppen"
+                    onChange={handleSelectGroupChange}
+                  >
+                    {
+                      groups.map((group, index) => {
+                        return (
+                          <MenuItem key={index} value={group}>{group}</MenuItem>
+                        );
+                      })
+                    }
+                  </Select>
+                  {selectedGroupValue ?
+                  <Select
+                    style={{ width: "310px", height: "40px", margin: "10px" }}
+                    labelId="selectgroup-label"
+                    id="selectuser"
+                    value={selectedGroup}
+                    label="Benutzer"
+                    onChange={handleSelectUserChange}
+                  >
+                    { usersOfGroup ?
+                    usersOfGroup.map((user, index) => {
                       return (
-                        <MenuItem key={index} value={group}>{group}</MenuItem>
+                        <MenuItem key={index} value={user.username}>{user.username}</MenuItem>
                       );
                     })
+                  : null
                   }
-                </Select>
-                <Input
-                  type="name"
-                  name="name"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.name}
-                />
-                <span className='bold'>Einmalige Aufgabe?</span>{' '}
-                <Input
-                  type="checkbox"
-                  name="checkbox"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.name}
-                />
-                <Button type="submit" disabled={isSubmitting}>
-                  Submit
-                </Button>
-              </Form>
-            )}
-          </Formik>
+                  </Select>
+                  : null
+                }
+                  <Input
+                    type="name"
+                    name="name"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.name}
+                  />
+                  <span className='bold'>Einmalige Aufgabe?</span>{' '}
+                  <Input
+                    type="checkbox"
+                    name="checkbox"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.name}
+                  />
+                  <Button type="submit" disabled={isSubmitting}>
+                    Submit
+                  </Button>
+                </Form>
+              )}
+            </Formik>
+          </>
           : null
         }
       </div>

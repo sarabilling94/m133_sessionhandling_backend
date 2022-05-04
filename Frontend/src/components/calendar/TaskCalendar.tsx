@@ -15,11 +15,16 @@ function TaskCalendar(): JSX.Element {
   const [selectedUserValue, setSelectedUserValue] = useState("");
 
   const onSubmit = (name, checkbox) => {
+    console.log("checkbox:", checkbox);
+
     const obj = {
       task: name,
       group: selectedGroupValue,
-      date: date.toISOString().split('T')[0]
+      date: date.toISOString().split('T')[0],
+      user: selectedUserValue
     };
+
+    console.log(selectedUserValue);
 
     if (checkbox) {//onetimetask
       axios.post('http://localhost/haushaltsapp/Backend/Controllers/tasks/insertonetimetask.php', obj, { withCredentials: true })
@@ -143,7 +148,7 @@ function TaskCalendar(): JSX.Element {
                     style={{ width: "310px", height: "40px", margin: "10px" }}
                     labelId="selectgroup-label"
                     id="selectuser"
-                    value={selectedGroup}
+                    value={selectedUserOfGroup}
                     label="Benutzer"
                     onChange={handleSelectUserChange}
                   >

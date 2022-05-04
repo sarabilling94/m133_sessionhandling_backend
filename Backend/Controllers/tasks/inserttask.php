@@ -2,7 +2,7 @@
 session_start();
 require '../../connect.php';
 require '../../utils/accesscontrol.php';
-require '../groups/groupfunctions.php';
+require '../users/userfunctions.php';
 
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){
@@ -12,9 +12,10 @@ if(isset($postdata) && !empty($postdata)){
     $task = mysqli_real_escape_string($db, $request->task);
     $date = mysqli_real_escape_string($db, $request->date);
     $group = mysqli_real_escape_string($db, $request->group);
+    $user = mysqli_real_escape_string($db, $request->user);
 
     if((strlen($task) < 1) || (strlen($task) > 100)
-    || !$group || !$date){
+    || !$group || !$date || !$user){
         http_response_code(422);
         die();
     }
@@ -36,7 +37,7 @@ if(isset($postdata) && !empty($postdata)){
     $taskId = $data["id_task"];
 
     $groupId = getGroupId($group, $db);
-    $userId = $_SESSION["id_user"];
+    $userId = getUserId($user, $db);
 
     // get groupuserid
     $sqlGetGroupUserId = "SELECT id_groupuser FROM tbl_groupuser WHERE 

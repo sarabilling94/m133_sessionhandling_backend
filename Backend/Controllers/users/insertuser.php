@@ -16,7 +16,7 @@ if(isset($postdata) && !empty($postdata)){
 
     $alreadyExists = userExists($name, $db);
 
-    if((strlen($name) > 0) && (strlen($name) < 50) && (strlen($password) > 5)){
+    if((strlen($name) > 0) && (strlen($name) < 50) && (strlen($password) > 7)){
         if(!$alreadyExists){
             $sql = "INSERT INTO tbl_user (name,password) VALUES ('$name','$hashedpassword')";
             if(mysqli_query($db,$sql)){

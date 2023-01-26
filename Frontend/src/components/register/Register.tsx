@@ -22,7 +22,7 @@ function Register(): JSX.Element {
       .catch(error => {
         console.log(error.response)
         if (error.response.statusText === "Unprocessable Entity") {
-          setMessage("Benutzername muss zwischen 0 und 50 Zeichen haben und Passwort muss mehr als 5 Zeichen haben.");
+          setMessage("Benutzername muss zwischen 0 und 50 Zeichen haben und Passwort muss mindestens 8 Zeichen haben.");
         }
         else if (error.response.statusText === "Conflict") {
           setMessage("Benutzername existiert schon.");

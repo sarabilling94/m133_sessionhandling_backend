@@ -12,7 +12,7 @@ if(isset($postdata) && !empty($postdata)){
      
     $name = mysqli_real_escape_string($db,$request->name);
     $password = mysqli_real_escape_string($db,$request->password);
-    $hashedpassword = password_hash($password, PASSWORD_BCRYPT);
+    $hashedpassword = password_hash($password, PASSWORD_ARGON2I, ['memory_cost' => 1024, 'time_cost' => 2, 'threads' => 2]);
 
     $alreadyExists = userExists($name, $db);
 
